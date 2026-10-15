@@ -9199,7 +9199,7 @@ Justification Method: the 'text-justify' property</h3>
 
 	<pre class="propdef">
 	Name: text-justify
-	Value: [ auto | none | inter-word | inter-character | ruby ] || no-compress
+	Value: [ auto | none | inter-word | inter-character | kashida | ruby ] || no-compress
 	Initial: auto
 	Applies to: text
 	Inherited: yes
@@ -9387,6 +9387,37 @@ Justification Method: the 'text-justify' property</h3>
 			parsing/text-justify-computed-legacy.html
 			text-justify/text-justify-distribute-001.html
 			</wpt>
+
+		<dt><dfn>kashida</dfn>
+		<dd>
+			Justification elongates [=letters=] of [=cursive scripts=]
+			using calligraphic extension (kashida),
+			rather than or in addition to
+			adjusting space at [=word separators=].
+			This value is appropriate for scripts such as Arabic
+			that permit cursive elongation.
+
+			The user agent should insert cursive elongation
+			at a limited number of positions per word,
+			chosen based on typographic conventions
+			for the [=content language=].
+			Where cursive elongation is not available
+			or would produce an unacceptable result
+			(for example, for fonts not designed to support kashida),
+			the user agent may fall back to [=justification opportunities=]
+			at [=word separators=].
+
+			The 'text-kashida-space' property controls the ratio
+			of cursive elongation to [=word separator=] expansion.
+
+			If the user agent does not support cursive elongation
+			for the content language,
+			this value behaves as ''text-justify/auto''.
+
+			Issue: The glyph insertion-point selection algorithm is intentionally
+			left UA-defined in this specification, as it is tightly coupled
+			to font capabilities and language-specific typographic rules.
+			Informative guidance may be added in a future revision.
 
 		<dt><dfn>ruby</dfn>
 		<dd>
@@ -9651,6 +9682,40 @@ Minimum Requirements for ''text-justify/auto'' Justification</h4>
 	which indexes by writing system and language,
 	and is maintained by the <a href="https://www.w3.org/International/">W3C Internationalization Working Group</a>.
 	[[JUSTIFY]]
+
+<h3 id="text-kashida-space-property">
+Kashida Expansion Ratio: the 'text-kashida-space' property</h3>
+
+	<pre class="propdef">
+	Name: text-kashida-space
+	Value: <<percentage>>
+	Initial: 100%
+	Applies to: text
+	Inherited: yes
+	Canonical order: n/a
+	Computed value: the specified percentage, clamped to the range [0%, 100%]
+	Animation type: by computed value type
+	</pre>
+
+	This property specifies the proportion of justification space
+	allocated to cursive elongation (kashida)
+	as opposed to [=word separator=] expansion
+	when 'text-justify' is ''text-justify/kashida''.
+
+	A value of ''0%'' causes justification to use only [=word separator=] expansion,
+	behaving as ''text-justify/inter-word''.
+	A value of ''100%'' causes justification to use only cursive elongation,
+	with [=word separator=] expansion used only as a last-resort fallback
+	when no suitable elongation position is available on the line.
+	Intermediate values distribute justification space proportionally
+	between the two methods.
+
+	This property has no effect when 'text-justify'
+	computes to a value other than ''text-justify/kashida''.
+
+	<p class="advisement">
+	Authors should correctly language-tag content that uses kashida justification,
+	as the set of eligible elongation positions is script- and language-sensitive.
 
 <h3 id="text-group-align-property">
 Aligning a block of text within its container: the 'text-group-align' property</h3>
